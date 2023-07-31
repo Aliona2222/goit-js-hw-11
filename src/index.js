@@ -3,24 +3,25 @@ const ITEMS_PER_PAGE = 40;
 const SCROLL_THRESHOLD = 200;
 
 const gallery = document.querySelector('.gallery');
-const loadMoreButton = document.querySelector('.load-more');
+// const loadMoreButton = document.querySelector('.load-more');
 
 let currentPage = 1;
 let currentSearchQuery = '';
 let loading = false;
 
-loadMoreButton.style.display = 'none';
+// loadMoreButton.style.display = 'none';
 
 // SimpleLightbox
 const lightbox = new SimpleLightbox('.gallery a', {
   captions: true,
 });
 
+
 document.getElementById('search-form').addEventListener('submit', async (event) => {
   event.preventDefault();
   currentPage = 1;
   gallery.innerHTML = '';
-  loadMoreButton.style.display = 'none';
+  // loadMoreButton.style.display = 'none';
 
   const searchQuery = event.target.searchQuery.value.trim();
 
@@ -41,7 +42,6 @@ window.addEventListener('scroll', async () => {
     await fetchImages(currentSearchQuery, currentPage);
   }
 });
-
 
 
 async function fetchImages(query, page) {
@@ -72,17 +72,16 @@ async function fetchImages(query, page) {
     }
 
     if (hits.length < ITEMS_PER_PAGE) {
-      loadMoreButton.style.display = 'none';
+      // loadMoreButton.style.display = 'none';
       Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
     } else {
-      loadMoreButton.style.display = 'block';
+      // loadMoreButton.style.display = 'block';
     }
   } catch (error) {
     console.error('Error fetching images:', error);
     Notiflix.Notify.failure('Failed to fetch images. Please try again later.');
   }
 }
-
 
 
 function displayImages(images) {
