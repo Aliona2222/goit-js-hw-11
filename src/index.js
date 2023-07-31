@@ -5,46 +5,45 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 
 const API_KEY = '38558428-cb3057c82e30c898989dfbccf';
 const ITEMS_PER_PAGE = 40;
-const SCROLL_THRESHOLD = 200; 
+const SCROLL_THRESHOLD = 200;
 
 const gallery = document.querySelector('.gallery');
 const loadMoreButton = document.querySelector('.load-more');
 
 let currentPage = 1;
 let currentSearchQuery = '';
-let loading = false; 
+let loading = false;
 
-
-
+// Initialize SimpleLightbox
 const lightbox = new SimpleLightbox('.gallery a', {
-    captions: true,
-  });
-  
-  document.getElementById('search-form').addEventListener('submit', async (event) => {
-    event.preventDefault();
-    currentPage = 1;
-    gallery.innerHTML = '';
-    loadMoreButton.style.display = 'none';
-  
-    const searchQuery = event.target.searchQuery.value.trim();
-  
-    if (!searchQuery) return;
-  
-    currentSearchQuery = searchQuery;
-    await fetchImages(searchQuery, currentPage);
-  });
-  
-  window.addEventListener('scroll', async () => {
-    if (loading) return;
-  
-    const galleryHeight = gallery.getBoundingClientRect().height;
-    const scrollPosition = window.scrollY + window.innerHeight;
-  
-    if (scrollPosition >= galleryHeight - SCROLL_THRESHOLD) {
-      currentPage++;
-      await fetchImages(currentSearchQuery, currentPage);
-    }
-  });
+  captions: true,
+});
+
+document.getElementById('search-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  currentPage = 1;
+  gallery.innerHTML = '';
+  loadMoreButton.style.display = 'none';
+
+  const searchQuery = event.target.searchQuery.value.trim();
+
+  if (!searchQuery) return;
+
+  currentSearchQuery = searchQuery;
+  await fetchImages(searchQuery, currentPage);
+});
+
+window.addEventListener('scroll', async () => {
+  if (loading) return;
+
+  const galleryHeight = gallery.getBoundingClientRect().height;
+  const scrollPosition = window.scrollY + window.innerHeight;
+
+  if (scrollPosition >= galleryHeight - SCROLL_THRESHOLD) {
+    currentPage++;
+    await fetchImages(currentSearchQuery, currentPage);
+  }
+});
 
 
 
@@ -93,7 +92,7 @@ function displayImages(images) {
     const imageCards = images.map((image) => {
       const card = document.createElement('div');
       card.innerHTML = `
-        <div class="photo-card">
+        <a href="${image.largeImageURL}" class="photo-card">
           <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" />
           <div class="info">
             <p class="info-item"><b>Likes</b>: ${image.likes}</p>
@@ -101,11 +100,12 @@ function displayImages(images) {
             <p class="info-item"><b>Comments</b>: ${image.comments}</p>
             <p class="info-item"><b>Downloads</b>: ${image.downloads}</p>
           </div>
-        </div>
+        </a>
       `;
   
       return card;
     });
   
     gallery.append(...imageCards);
-}
+    lightbox.refresh(); // Оновлення SimpleLightbox після додавання нових зображень
+  }
