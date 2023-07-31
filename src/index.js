@@ -1,8 +1,3 @@
-import axios from 'axios';
-import Notiflix from 'notiflix';
-import SimpleLightbox from 'simplelightbox';
-import "simplelightbox/dist/simple-lightbox.min.css";
-
 const API_KEY = '38558428-cb3057c82e30c898989dfbccf';
 const ITEMS_PER_PAGE = 40;
 const SCROLL_THRESHOLD = 200;
@@ -14,7 +9,9 @@ let currentPage = 1;
 let currentSearchQuery = '';
 let loading = false;
 
-// Initialize SimpleLightbox
+loadMoreButton.style.display = 'none';
+
+// SimpleLightbox
 const lightbox = new SimpleLightbox('.gallery a', {
   captions: true,
 });
@@ -107,5 +104,5 @@ function displayImages(images) {
     });
   
     gallery.append(...imageCards);
-    lightbox.refresh(); // Оновлення SimpleLightbox після додавання нових зображень
+    lightbox.refresh(); 
   }
